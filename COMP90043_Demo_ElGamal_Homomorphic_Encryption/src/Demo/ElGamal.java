@@ -7,14 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- * Security of the ElGamal algorithm depends on the difficulty of computing discrete logs
- * in a large prime modulus
- *
- * - Theorem 1 : a in [Z/Z[p]] then a^(p-1) [p] = 1
- * - Theorem 2 : the order of an element split the order group
- */
-public final class ElGamal { // TODO extends Cryptosystem
+public final class ElGamal {
 	
 	private static BigInteger r;
 	private static List<BigInteger> encrypt;
@@ -22,12 +15,9 @@ public final class ElGamal { // TODO extends Cryptosystem
 
     public static BigInteger TWO = new BigInteger("2");
 
-
-    
+    //Generate key for ElGamal
     public static List<List<BigInteger>> KeyGen(int n) {
-        // (a) take a random prime p with getPrime() function. p = 2 * p' + 1 with prime(p') = true
         BigInteger p = getPrime(n, 40, new Random());
-        // (b) take a random element in [Z/Z[p]]* (p' order)
         BigInteger g = randNum(p, new Random());
         BigInteger pPrime = p.subtract(BigInteger.ONE).divide(ElGamal.TWO);
 
@@ -38,41 +28,36 @@ public final class ElGamal { // TODO extends Cryptosystem
                 g = randNum(p, new Random());
         }
 
-        // (c) take x random in [0, p' - 1]
         BigInteger x = randNum(pPrime.subtract(BigInteger.ONE), new Random());
         BigInteger h = g.modPow(x, p);
-        // secret key is (p, x) and public key is (p, g, h)
         List<BigInteger> sk = new ArrayList<>(Arrays.asList(p, x));
         List<BigInteger> pk = new ArrayList<>(Arrays.asList(p, g, h));
-        // [0] = pk, [1] = sk
         return new ArrayList<>(Arrays.asList(pk, sk));
     }
 
+    //ElGamal encryption function
     public static List<BigInteger> Encrypt(BigInteger p, BigInteger g, BigInteger h, BigInteger message) {
         BigInteger pPrime = p.subtract(BigInteger.ONE).divide(ElGamal.TWO);
-        // TODO [0, N -1] or [1, N-1] ?
         r = randNum(pPrime, new Random());
-        // encrypt couple (g^r, m * h^r)
         return new ArrayList<>(Arrays.asList(g.modPow(r, p), message.multiply(h.modPow(r, p))));
     }
     
+    //ElGamal decryption function for second input
     public static List<BigInteger> Encrypt_Second(BigInteger p, BigInteger g, BigInteger h, BigInteger message) {
         BigInteger pPrime = p.subtract(BigInteger.ONE).divide(ElGamal.TWO);
-        // TODO [0, N -1] or [1, N-1] ?
-        //BigInteger r = randNum(pPrime, new Random());
-        // encrypt couple (g^r, m * h^r)
         return new ArrayList<>(Arrays.asList(g.modPow(r, p), message.multiply(h.modPow(r, p))));
     } 
 
     
+    //ElGamal decryption function
     public static BigInteger Decrypt(BigInteger p, BigInteger x, BigInteger gr, BigInteger mhr) {
         BigInteger hr = gr.modPow(x, p);
         return mhr.multiply(hr.modInverse(p)).mod(p);
     }
 
+    //Generate a prime BigInt
     public static BigInteger getPrime(int nb_bits, int certainty, Random prg) {
         BigInteger pPrime = new BigInteger(nb_bits, certainty, prg);
-        // p = 2 * pPrime + 1
         BigInteger p = pPrime.multiply(TWO).add(BigInteger.ONE);
 
         while (!p.isProbablePrime(certainty)) {
@@ -82,12 +67,13 @@ public final class ElGamal { // TODO extends Cryptosystem
         return p;
     }
 
-    
+    //Generate a random BigInt
     public static BigInteger randNum(BigInteger N, Random prg) {
         return new BigInteger(N.bitLength() + 100, prg).mod(N);
     }
     
     
+    //Additive Homomorphic Encryption function
     public static void startAdditiveHomomorphicEncryption(String input1, String input2,BigInteger p, BigInteger x) {
 	  
         System.out.println("Additive Homomorphic Encrypting now, please wait...");
@@ -111,6 +97,7 @@ public final class ElGamal { // TODO extends Cryptosystem
                 
     }
     
+    //Multiplicative Homomorphic Encryption function
     public static void startMultiplicativeHomomorphicEncryption(String input1, String input2,BigInteger p, BigInteger x) {
   	  
         System.out.println("**********************" + "Multiplicative Homomorphic Encryption Start" + "********************");
@@ -144,12 +131,12 @@ public final class ElGamal { // TODO extends Cryptosystem
         BigInteger x = pksk.get(1).get(1);
         
         //get input
-        System.out.println("Please input first plaintext:");
+        System.out.println("Please input first plaintext(INT):");
         Scanner sc=new Scanner(System.in);
         String strInput = sc.nextLine();        
         encrypt = ElGamal.Encrypt(p, g, h, new BigInteger(strInput));
         
-        System.out.println("Please input second plaintext:");
+        System.out.println("Please input second plaintext(INT):");
         Scanner sc2=new Scanner(System.in);
         String strInput2 = sc.nextLine();        
         encrypt2 = ElGamal.Encrypt_Second(p, g, h, new BigInteger(strInput2));
