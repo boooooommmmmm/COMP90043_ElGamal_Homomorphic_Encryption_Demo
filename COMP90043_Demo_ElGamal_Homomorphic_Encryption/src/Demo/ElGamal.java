@@ -95,7 +95,7 @@ public final class ElGamal { // TODO extends Cryptosystem
         System.out.println("Ciphertext for first input: \t\t\t\t\t" + encrypt.toString());
         //System.out.println("Decrypted : " + ElGamal.Decrypt(p, x, encrypt.get(0), encrypt.get(1)));
         
-        System.out.println("Ciphertext for second input: \t\t\t\t\tS" + encrypt2.toString());
+        System.out.println("Ciphertext for second input: \t\t\t\t\t" + encrypt2.toString());
         //System.out.println("Decrypted : " + ElGamal.Decrypt(p, x, encrypt2.get(0), encrypt2.get(1)));
         
         BigInteger addResult;
