@@ -4,9 +4,7 @@
 
 ## What is this project?
 
-This is a simple 
-
-
+This is a simple demo project for COMP90043 Cryptography and security report "**Cryptography for privacy preserving data aggregation**". For more information about this subject, please click [here](https://handbook.unimelb.edu.au/subjects/comp90043).
 
 
 
@@ -21,3 +19,12 @@ This is a simple
 
 
 
+## Acknowledgement 
+
+Thanks for Ananasr, GitHub link: https://github.com/Ananasr/Cryptology
+
+
+
+## Licence
+
+You can copy/use/modify this code without notice me.
