@@ -71,7 +71,8 @@ public final class ElGamal_iteration_test {
 		return new BigInteger(N.bitLength() + 100, prg).mod(N);
 	}
 
-	// Super powerful loop, when decryption result is not equal to estimate result, break the loop
+	// Super powerful loop, when decryption result is not equal to estimate result,
+	// break the loop
 	public static void startEncryptionLoop(BigInteger input1, BigInteger input2, BigInteger p, BigInteger x) {
 		System.out.println("Additive Homomorphic Encrypting now, please wait...");
 		System.out.println("**************************" + "Infinite Additive Homomorphic Encryption Start"
@@ -82,15 +83,17 @@ public final class ElGamal_iteration_test {
 		boolean a;
 		BigInteger decryptionResult;
 		BigInteger estimatedResult;
+		BigInteger tempResult;
 		List<BigInteger> resultList = new ArrayList<BigInteger>();
 
 		int resultIsTrue = 0;
 		estimatedResult = input1.add(input2);
 
-		//do the first loop and initialise all elements
+		// do the first loop and initialise all elements
 		resultList = startAdditiveHomomorphicEncryption(encrypt.get(1), encrypt2.get(1), p, x);
 		decryptionResult = startAdditiveHomomorphicDecryption(resultList.get(1), p, x);
 		resultIsTrue = estimatedResult.compareTo(decryptionResult);
+		tempResult = decryptionResult;
 
 		while (resultIsTrue == 0) {
 
@@ -103,17 +106,23 @@ public final class ElGamal_iteration_test {
 					// System.out.println("decryptionResult:" + decryptionResult);
 				}
 
-				resultIsTrue = (estimatedResult).compareTo(decryptionResult);
-				System.out.println("Estimated Result:\t" + estimatedResult);
-				System.out.println("Decryption Result:\t" + decryptionResult);
-				//update the estimated result
-				estimatedResult = estimatedResult.multiply(TWO.pow(count));
+				
+				if (count == 1 || count ==2) {
+					resultIsTrue = (estimatedResult).compareTo(decryptionResult.divide(TWO.pow(count - 1)));
+				} else {
+					resultIsTrue = (TWO.pow(count-1)).compareTo(decryptionResult.divide(tempResult));
+				}
+				
+				System.out.println("Estimated Result: \t\t\t\t" + estimatedResult);
+				System.out.println("Decryption Result:\t\t\t\t" + decryptionResult);
+				System.out.println("Decryption Result divide by times of additive:\t" + ((decryptionResult.divide(tempResult)).divide((TWO.pow(count-1)))).multiply(estimatedResult));
+				tempResult = decryptionResult;
 			}
 
 			if (resultIsTrue != 0) {
 				successfulState = "fail";
 			}
-			System.out.println("Enpcryt for loop: " + count + "\t" + successfulState);
+			System.out.println("Enpcryt for loop: " + count + "\t\t\t\t" + successfulState);
 			System.out.println();
 
 			count++;
@@ -149,7 +158,7 @@ public final class ElGamal_iteration_test {
 
 	}
 
-	//main
+	// main
 	public static void main(String[] args) {
 		List<List<BigInteger>> pksk = ElGamal_iteration_test.KeyGen(200);
 		// public key
