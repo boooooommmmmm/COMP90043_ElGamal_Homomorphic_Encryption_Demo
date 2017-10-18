@@ -33,7 +33,9 @@ This project is to demonstrate how ElGamal Homomorphic Encryption works and the 
 
 ## Theory based
 
-![3](/image/Theory.png)
+
+
+![3](/image/Theory.png)![3](/image/Theory2.png)
 
 
 
